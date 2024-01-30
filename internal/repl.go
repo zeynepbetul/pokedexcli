@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"bufio"
@@ -100,7 +100,7 @@ func commandExit() {
 	os.Exit(0)
 }
 
-func startRepl() {
+func StartRepl() {
 	scanner := bufio.NewScanner(os.Stdin)
 	fmt.Print("> ")
 	scanner.Scan()
