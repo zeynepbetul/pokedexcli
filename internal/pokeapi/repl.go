@@ -9,34 +9,12 @@ import (
 var url = "https://pokeapi.co/api/v2/location-area/"
 var locations = LocationAreaResponse{}
 
-//func newLocation(count int, next *string, previous *string, results []Result) LocationAreaResponse {
-//	return LocationAreaResponse{
-//		Count: count,
-//		Next: next,
-//		Previous: previous,
-//		Results: results,
-//	}
-//}
-//func newResults(name string, url string) Result {
-//	return Result{
-//		Name: name,
-//		URL: url,
-//	}
-//}
-
 type cliCommand struct {
 	name        string
 	description string
 	callback    func()
 }
 
-// var results = []Result
-// var results = newResults("", "https://pokeapi.co/api/v2/location-area/")
-// var locations = newLocation(0, nil, nil, resu)
-//
-//	var locations = LocationAreaResponse{
-//		Results: results,
-//	}
 func getMap() map[string]cliCommand {
 
 	return map[string]cliCommand{
