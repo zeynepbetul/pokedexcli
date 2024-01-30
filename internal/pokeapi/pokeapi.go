@@ -8,18 +8,6 @@ import (
 	"net/http"
 )
 
-type LocationAreaResponse struct {
-	Count    int      `json:"count"`
-	Next     *string  `json:"next"`
-	Previous *string  `json:"previous"`
-	Results  []Result `json:"results"`
-}
-
-type Result struct {
-	Name string `json:"name"`
-	URL  string `json:"url"`
-}
-
 func (locations *LocationAreaResponse) requestLocations(endpointUrl string) { // receiver should be type 'pointer receiver' to be able to use original struct. Otherwise, it creates a copy of it and make changes on the copy.
 	// function to be part of the struct's methods OR being a standalone function that can operate on any instance of LocationAreaResponse passed as a pointer. -- OPEN
 	response, err := http.Get(endpointUrl)
