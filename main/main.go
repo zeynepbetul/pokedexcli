@@ -1,9 +1,9 @@
 package main
 
-import "github.com/zeynepbetul/pokedexcli/internal"
+import "github.com/zeynepbetul/pokedexcli/internal/pokeapi"
 
 func main() { // go build && ./pokedexcli
 	for {
-		internal.StartRepl()
+		pokeapi.StartRepl()
 	}
 }
