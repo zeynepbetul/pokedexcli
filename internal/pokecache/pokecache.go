@@ -6,52 +6,52 @@ import (
 )
 
 var interval = 35 * time.Second
-var Cache = NewCache(interval)
+var FirstCache = NewCache(interval)
 
-type cacheEntry struct {
-	createdAt time.Time
-	val       []byte // represents the raw data we're caching
+type CacheEntry struct {
+	CreatedAt time.Time
+	Val       []byte // represents the raw data we're caching
 }
-type cache struct {
-	cacheEntries map[string]cacheEntry
+type Cache struct {
+	CacheEntries map[string]CacheEntry
 	Mu           sync.Mutex
-	interval     time.Duration
+	Interval     time.Duration
 }
 
-func NewCache(interval time.Duration) cache {
-	cacheEntries := make(map[string]cacheEntry)
+func NewCache(interval time.Duration) Cache {
+	cacheEntries := make(map[string]CacheEntry)
 
-	newC := cache{
-		cacheEntries: cacheEntries,
-		interval:     interval,
+	newC := Cache{
+		CacheEntries: cacheEntries,
+		Interval:     interval,
 	}
 	ticker := time.NewTicker(5 * time.Second)
 	go func() {
 		for range ticker.C {
-			newC.reapLoop()
+			newC.ReapLoop()
 		}
 	}()
 	return newC
 }
 
-func (c *cache) reapLoop() {
-	for key, value := range c.cacheEntries {
-		if time.Now().Sub(value.createdAt) > c.interval {
+func (c *Cache) ReapLoop() {
+	for key, value := range c.CacheEntries {
+		if time.Now().Sub(value.CreatedAt) > c.Interval {
 			c.Mu.Lock()
-			delete(c.cacheEntries, key)
+			delete(c.CacheEntries, key)
 			c.Mu.Unlock()
 		}
 	}
 }
 
-func (c *cache) Add(key string, val []byte) {
-	c.cacheEntries[key] = cacheEntry{
-		val:       val,
-		createdAt: time.Now(),
+func (c *Cache) Add(key string, val []byte) {
+	c.CacheEntries[key] = CacheEntry{
+		Val:       val,
+		CreatedAt: time.Now(),
 	}
 }
 
-func (c *cache) Get(key string) ([]byte, bool) {
-	cacheEntry, ok := c.cacheEntries[key]
-	return cacheEntry.val, ok
+func (c *Cache) Get(key string) ([]byte, bool) {
+	cacheEntry, ok := c.CacheEntries[key]
+	return cacheEntry.Val, ok
 }

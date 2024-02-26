@@ -12,9 +12,9 @@ import (
 func (locationsStruct *LocationAreaResponse) requestLocations(endpointUrl string) { // receiver should be type 'pointer receiver' to be able to use original struct. Otherwise, it creates a copy of it and make changes on the copy.
 	// function to be part of the struct's methods OR being a standalone function that can operate on any instance of LocationAreaResponse passed as a pointer. -- OPEN
 	var body []byte
-	pokecache.Cache.Mu.Lock()
-	entry, ok := pokecache.Cache.Get(endpointUrl) // try to get response body from the cache
-	pokecache.Cache.Mu.Unlock()
+	pokecache.FirstCache.Mu.Lock()
+	entry, ok := pokecache.FirstCache.Get(endpointUrl) // try to get response body from the cache
+	pokecache.FirstCache.Mu.Unlock()
 
 	if ok {
 		body = entry
@@ -33,9 +33,9 @@ func (locationsStruct *LocationAreaResponse) requestLocations(endpointUrl string
 		if err != nil {
 			fmt.Println("Error reading response body", err)
 		}
-		pokecache.Cache.Mu.Lock()
-		pokecache.Cache.Add(endpointUrl, body) // cache all the response body which have: count, next, prev, results in it
-		pokecache.Cache.Mu.Unlock()
+		pokecache.FirstCache.Mu.Lock()
+		pokecache.FirstCache.Add(endpointUrl, body) // cache all the response body which have: count, next, prev, results in it
+		pokecache.FirstCache.Mu.Unlock()
 	}
 	if err := json.Unmarshal(body, &locationsStruct); err != nil {
 		fmt.Println(err)
